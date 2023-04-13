@@ -17,7 +17,9 @@ class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-        self.ffmpeg_path = "cogs/utils/ffmpeg/ffmpeg.exe"
+        self.ffmpeg_path = "ffmpeg"
+        if os.path.isfile("cogs/utils/ffmpeg.exe"):
+            self.ffmpeg_path = "cogs/utils/ffmpeg.exe"
 
         self.vc = None
         self.id = 0 
@@ -39,7 +41,9 @@ class Music(commands.Cog):
                 voice_channel = ctx.message.author.voice.channel
                 self.vc = await voice_channel.connect()    
             else:
-                await ctx.channel.send("`Connect to voice channel first`")
+                await ctx.channel.send(
+                    embed=EmbedTemplates.generic_text("❗ You have to be in voice chat", 'red')
+                )
                 return False
         return True
 
@@ -158,6 +162,3 @@ class Music(commands.Cog):
 
 async def setup(bot):
     await bot.add_cog(Music(bot))
-
-
-
